@@ -1,0 +1,6 @@
+model_list:
+  - model_name: mistral-7b
+    litellm_params:
+      model: ollama/mistral
+      api_base: http://ollama:11434
+      # stream: True

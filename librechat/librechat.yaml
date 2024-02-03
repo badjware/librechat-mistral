@@ -1,0 +1,20 @@
+version: 1.0.1
+cache: true
+endpoints:
+  custom:
+      # Example using Mistral AI API
+    - name: "Mistral"
+      apiKey: "noUse"
+      baseURL: "http://litellm:8000"
+      models: 
+        default: ["mistral-7b"]
+      titleConvo: true
+      titleModel: "mistral-7b" 
+      summarize: true
+      summaryModel: "mistral-7b" 
+      forcePrompt: false 
+      modelDisplayLabel: "Mistral"
+      # addParams:
+      #   safe_prompt: true
+      # NOTE: For Mistral, it is necessary to drop the following parameters or you will encounter a 422 Error:
+      dropParams: ["stop", "user", "frequency_penalty", "presence_penalty"]

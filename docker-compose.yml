@@ -1,0 +1,71 @@
+version: "3"
+services:
+  ollama:
+    image: ollama/ollama:0.1.22-rocm
+    restart: unless-stopped
+    entrypoint: /bootstrap.sh
+    env_file:
+      - .env
+    ports:
+     - 11434:11434
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    group_add:
+      - video
+    ipc: host
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp=unconfined
+    volumes:
+      - ./ollama/bootstrap.sh:/bootstrap.sh:ro
+      - ollama:/root/.ollama
+
+  litellm:
+    image: ghcr.io/berriai/litellm:main-latest
+    command: --config /config.yaml
+    ports:
+     - 8000:8000
+    volumes:
+      - ./litellm/config.yaml:/config.yaml:ro
+
+  librechat:
+    image: ghcr.io/danny-avila/librechat
+    ports:
+      - 3080:3080
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+    # user: "${UID}:${GID}"
+    env_file:
+      - .env
+    environment:
+      - HOST=0.0.0.0
+      - MONGO_URI=mongodb://mongodb:27017/LibreChat
+      - MEILI_HOST=http://meilisearch:7700
+    volumes:
+      - ./librechat/librechat.yaml:/app/librechat.yaml:ro
+      - librechat_images:/app/client/public/images
+  mongodb:
+    image: mongo
+    restart: unless-stopped
+    # user: "${UID}:${GID}"
+    volumes:
+      - librechat_mongodb_data:/data/db
+    command: mongod --noauth
+  meilisearch:
+    image: getmeili/meilisearch:v1.5
+    restart: unless-stopped
+    # user: "${UID}:${GID}"
+    environment:
+      - MEILI_HOST=http://meilisearch:7700
+      - MEILI_NO_ANALYTICS=true
+    volumes:
+      - librechat_meilisearch_data:/meili_data
+
+volumes:
+  ollama:
+  librechat_images:
+  librechat_mongodb_data:
+  librechat_meilisearch_data:
