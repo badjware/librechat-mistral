@@ -4,6 +4,7 @@ services:
     image: ollama/ollama:0.1.22-rocm
     restart: unless-stopped
     entrypoint: /bootstrap.sh
+    command: mistral
     env_file:
       - .env
     ports:
