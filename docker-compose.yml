@@ -1,5 +1,6 @@
 version: "3"
 services:
+  # Begin Ollama service
   ollama:
     image: ollama/ollama:0.1.22-rocm
     restart: unless-stopped
@@ -9,6 +10,7 @@ services:
       - .env
     ports:
      - 11434:11434
+    # begin for AMD GPU support
     devices:
       - /dev/kfd
       - /dev/dri
@@ -19,10 +21,12 @@ services:
       - SYS_PTRACE
     security_opt:
       - seccomp=unconfined
+    # end of section for AMD GPU support
     volumes:
       - ./ollama/bootstrap.sh:/bootstrap.sh:ro
       - ollama:/root/.ollama
 
+  # Begin LiteLLM service
   litellm:
     image: ghcr.io/berriai/litellm:main-latest
     command: --config /config.yaml
@@ -31,6 +35,7 @@ services:
     volumes:
       - ./litellm/config.yaml:/config.yaml:ro
 
+  # Begin LibreChat
   librechat:
     image: ghcr.io/danny-avila/librechat
     ports:
