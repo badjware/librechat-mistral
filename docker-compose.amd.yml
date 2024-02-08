@@ -23,6 +23,11 @@ services:
       - SYS_PTRACE
     security_opt:
       - seccomp=unconfined
+    environment:
+      # https://github.com/ROCm/ROCm/issues/2625
+      GPU_MAX_HW_QUEUES: 1
+      # https://github.com/ROCm/ROCm/issues/2788#issuecomment-1915765846
+      # HSA_OVERRIDE_GFX_VERSION: 11.0.0
     # end of section for AMD GPU support
     volumes:
       - ./ollama/bootstrap.sh:/bootstrap.sh:ro

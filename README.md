@@ -2,8 +2,6 @@
 
 A quick prototype to self-host [LibreChat](https://github.com/danny-avila/LibreChat) with [Mistral](https://mistral.ai/news/announcing-mistral-7b/), and a OpenAI-like api provided by [LiteLLM](https://github.com/BerriAI/litellm) on the side.
 
-**Currently setup to run on an AMD GPU (RX 7xxx series), although the deployment could be adapted for Nvidia or other AMD GPUS**
-
 ## Goals
 
 * Deploy a ChatGPT Clone for daily use.
@@ -14,17 +12,25 @@ A quick prototype to self-host [LibreChat](https://github.com/danny-avila/LibreC
 
 ### Prerequisites
 
-* Linux (WSL2 is untested)
-* An AMD 7xxx series GPU (technically optional, Ollama will fallback to using the CPU but it will be very slow. Other GPUS are supported but the deployment must be modified to use them)
+* Linux or WSL2
 * docker
-* docker-compose
 
-### Steps
+### Steps for NVIDIA GPU
 
 1. Clone the repo
-2. Run `docker-compose up`. Wait for a few minutes for the model to be downloaded and served.
-3. Browse http://localhost:3080/
-4. Create an admin account and start chatting!
+2. Copy the AMD compose spec to select it. `cp docker-compose.nvidia.yml docker.compose.yml`
+3. Run `docker compose up`. Wait for a few minutes for the model to be downloaded and served.
+4. Browse http://localhost:3080/
+5. Create an admin account and start chatting!
+
+### Steps for AMD GPU
+
+1. Clone the repo
+2. Copy the AMD compose spec to select it. `cp docker-compose.amd.yml docker.compose.yml`
+3. If you are using an RX (consumer) series GPU, you *may* need to set `HSA_OVERRIDE_GFX_VERSION` to an appropriate value for the model of your GPU. You will need to look it up. The value can be set in *docker-compose.yml*,
+4. Run `docker compose up`. Wait for a few minutes for the model to be downloaded and served.
+5. Browse http://localhost:3080/
+6. Create an admin account and start chatting!
 
 The API along with the APIDoc will be available at http://localhost:8000/
 
@@ -41,15 +47,15 @@ Let say we want to configure an OpenAI API key.
 1. Open the *.env* file.
 2. Uncomment the line `# OPENAI_API_KEY=user_provided`.
 3. Replace `user_provided` with your API key.
-4. Restart LibreChat `docker-compose restart librechat`.
+4. Restart LibreChat `docker compose restart librechat`.
 
-Refer to the LibreChat documentation for the full list of configuration options.
+Refer to the [LibreChat documentation](https://docs.librechat.ai/install/configuration/ai_setup.html#openai) for the full list of configuration options.
 
 ### Ollama (self-hosted)
 
 Browse the [Ollama models library](https://ollama.ai/library) to find a model you wish to add. For this example we will add [mistral-openorca](https://ollama.ai/library/mistral-openorca)
 
-1. Open the *docker-compose.yml* file.
+1. Open the *docker compose.yml* file.
 2. Find the `ollama` service. Find the `command:` option under the ollama sevice. Append the name of the model you wish to add at the end of the list (eg: `command: mistral mistral-openorca`).
 3. Open the *litellm/config.yaml* file.
 4. Add the following a the end of the file, replace {model_name} placeholders with the name of your model
@@ -77,14 +83,10 @@ becomes:
       models: 
         default: ["mistral-7b", "mistral-openorca"]
 ```
-7. Restart the stack `docker-compose restart`. Wait for a few minutes for the model to be downloaded and served.
+7. Restart the stack `docker compose restart`. Wait for a few minutes for the model to be downloaded and served.
 
 ## Architecture components
 
 * [LibreChat](https://github.com/danny-avila/LibreChat) is a ChatGPT clone with support for multiple AI endpoints. It's deployed alongside a [MongoDB](https://github.com/mongodb/mongo) database and [Meillisearch](https://github.com/meilisearch/meilisearch) for search. It's exposed on http://localhost:3080/.
 * [LiteLLM](https://github.com/BerriAI/litellm) is an OpenAI-like API. It is exposed on http://localhost:8000/ without any authentication by default.
 * [Ollama](https://github.com/ollama/ollama) manages and serve the local models.
-
-## TODO
-
-At the time of this project, I only had access to a Linux machine with an AMD RX 7800XT GPU. I would like to include support for Windows and/or Nvidia GPUs when I get the chance.
