@@ -1,0 +1,26 @@
+include: 
+  - docker-compose.base.yml
+
+services:
+  # Begin Ollama service
+  ollama:
+    image: ollama/ollama:0.1.23
+    restart: unless-stopped
+    entrypoint: /bootstrap.sh
+    command: mistral
+    env_file:
+      - .env
+    ports:
+     - 11434:11434
+    # begin for NVIDIA GPU support
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    # end of section for NVIDIA GPU support
+    volumes:
+      - ./ollama/bootstrap.sh:/bootstrap.sh:ro
+      - ./ollama:/root/.ollama
