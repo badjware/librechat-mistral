@@ -1,31 +1,4 @@
-version: "3"
 services:
-  # Begin Ollama service
-  ollama:
-    image: ollama/ollama:0.1.22-rocm
-    restart: unless-stopped
-    entrypoint: /bootstrap.sh
-    command: mistral
-    env_file:
-      - .env
-    ports:
-     - 11434:11434
-    # begin for AMD GPU support
-    devices:
-      - /dev/kfd
-      - /dev/dri
-    group_add:
-      - video
-    ipc: host
-    cap_add:
-      - SYS_PTRACE
-    security_opt:
-      - seccomp=unconfined
-    # end of section for AMD GPU support
-    volumes:
-      - ./ollama/bootstrap.sh:/bootstrap.sh:ro
-      - ollama:/root/.ollama
-
   # Begin LiteLLM service
   litellm:
     image: ghcr.io/berriai/litellm:main-latest
@@ -71,7 +44,6 @@ services:
       - librechat_meilisearch_data:/meili_data
 
 volumes:
-  ollama:
   librechat_images:
   librechat_mongodb_data:
   librechat_meilisearch_data:
