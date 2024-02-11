@@ -1,9 +1,10 @@
 # librechat-mistral
 
-A quick prototype to self-host [LibreChat](https://github.com/danny-avila/LibreChat) with [Mistral](https://mistral.ai/news/announcing-mistral-7b/), and a OpenAI-like api provided by [LiteLLM](https://github.com/BerriAI/litellm) on the side.
+A quick prototype to self-host [LibreChat](https://github.com/danny-avila/LibreChat) with [Mistral](https://mistral.ai/news/announcing-mistral-7b/), and an OpenAI-like api provided by [LiteLLM](https://github.com/BerriAI/litellm) on the side.
 
 ## Goals
 
+* Streamline deployment of a local LLM for experimentation purpose.
 * Deploy a ChatGPT Clone for daily use.
 * Deploy an OpenAI-like API for hacking on Generative AI using well-supported libraries.
 * Use docker to prepare for an eventual deployment on a container orchestration platform like Kubernetes.
@@ -17,20 +18,25 @@ A quick prototype to self-host [LibreChat](https://github.com/danny-avila/LibreC
 
 ### Steps for NVIDIA GPU
 
-1. Clone the repo
-2. Copy the AMD compose spec to select it. `cp docker-compose.nvidia.yml docker.compose.yml`
-3. Run `docker compose up`. Wait for a few minutes for the model to be downloaded and served.
-4. Browse http://localhost:3080/
-5. Create an admin account and start chatting!
+1. Make sure your drivers are up to date.
+2. Install the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html).
+3. Clone the repo.
+4. Copy the AMD compose spec to select it. `cp docker-compose.nvidia.yml docker.compose.yml`
+5. Run `docker compose up`. Wait for a few minutes for the model to be downloaded and served.
+6. Browse http://localhost:3080/
+7. Create an admin account and start chatting!
 
 ### Steps for AMD GPU
 
-1. Clone the repo
-2. Copy the AMD compose spec to select it. `cp docker-compose.amd.yml docker.compose.yml`
-3. If you are using an RX (consumer) series GPU, you *may* need to set `HSA_OVERRIDE_GFX_VERSION` to an appropriate value for the model of your GPU. You will need to look it up. The value can be set in *docker-compose.yml*,
-4. Run `docker compose up`. Wait for a few minutes for the model to be downloaded and served.
-5. Browse http://localhost:3080/
-6. Create an admin account and start chatting!
+**Warning: AMD was not tested on Windows and support seems to not be as good as on Linux.**
+
+1. Make sure your drivers are up to date.
+2. Clone the repo.
+3. Copy the AMD compose spec to select it. `cp docker-compose.amd.yml docker.compose.yml`
+4. If you are using an RX (consumer) series GPU, you *may* need to set `HSA_OVERRIDE_GFX_VERSION` to an appropriate value for the model of your GPU. You will need to look it up. The value can be set in *docker-compose.yml*,
+5. Run `docker compose up`. Wait for a few minutes for the model to be downloaded and served.
+6. Browse http://localhost:3080/
+7. Create an admin account and start chatting!
 
 The API along with the APIDoc will be available at http://localhost:8000/
 
@@ -72,18 +78,7 @@ eg:
       model: ollama/mistral-openorca
       api_base: http://ollama:11434
 ```
-5. Open the *librechat/librechat.yaml* file.
-6. In our case, **mistral-openorca** is a variation of **mistral-7b** so we will group it with the existing **Mistral** endpoint. Refer to the [LibreChat documentation](https://docs.librechat.ai/install/configuration/custom_config.html#custom-endpoint-object-structure) if you wish to organize your new model as a new Endpoint.
-``` yaml
-      models: 
-        default: ["mistral-7b"]
-```
-becomes:
-``` yaml
-      models: 
-        default: ["mistral-7b", "mistral-openorca"]
-```
-7. Restart the stack `docker compose restart`. Wait for a few minutes for the model to be downloaded and served.
+5. Restart the stack `docker compose restart`. Wait for a few minutes for the model to be downloaded and served.
 
 ## Architecture components
 
