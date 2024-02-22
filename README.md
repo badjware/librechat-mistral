@@ -38,7 +38,16 @@ A quick prototype to self-host [LibreChat](https://github.com/danny-avila/LibreC
 6. Browse http://localhost:3080/
 7. Create an admin account and start chatting!
 
-The API along with the APIDoc will be available at http://localhost:8000/
+### Steps for NO GPU (use CPU)
+
+**Warning: This may be very slow depending on your CPU and may us a lot of RAM depending on the model**
+
+1. Make sure your drivers are up to date.
+2. Clone the repo.
+3. Copy the CPU compose spec to select it. `cp docker-compose.cpu.yml docker.compose.yml`
+4. Run `docker compose up`. Wait for a few minutes for the model to be downloaded and served.
+5. Browse http://localhost:3080/
+6. Create an admin account and start chatting!
 
 ## Configuring additional models
 

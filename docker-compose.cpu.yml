@@ -1,0 +1,17 @@
+include: 
+  - docker-compose.base.yml
+
+services:
+  # Begin Ollama service
+  ollama:
+    image: ollama/ollama:0.1.23
+    restart: unless-stopped
+    entrypoint: /bootstrap.sh
+    command: mistral
+    env_file:
+      - .env
+    ports:
+     - 11434:11434
+    volumes:
+      - ./ollama/bootstrap.sh:/bootstrap.sh:ro
+      - ./ollama:/root/.ollama
