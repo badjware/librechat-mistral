@@ -85,3 +85,4 @@ eg:
 * [LibreChat](https://github.com/danny-avila/LibreChat) is a ChatGPT clone with support for multiple AI endpoints. It's deployed alongside a [MongoDB](https://github.com/mongodb/mongo) database and [Meillisearch](https://github.com/meilisearch/meilisearch) for search. It's exposed on http://localhost:3080/.
 * [LiteLLM](https://github.com/BerriAI/litellm) is an OpenAI-like API. It is exposed on http://localhost:8000/ without any authentication by default.
 * [Ollama](https://github.com/ollama/ollama) manages and serve the local models.
+

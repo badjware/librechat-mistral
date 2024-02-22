@@ -7,12 +7,12 @@ endpoints:
       apiKey: "noUse"
       baseURL: "http://litellm:8000"
       models: 
-        default: ["mistral-7b"]
+        default: ["mistral"]
         fetch: true
       titleConvo: true
-      titleModel: "mistral-7b" 
+      titleModel: "mistral" 
       summarize: true
-      summaryModel: "mistral-7b" 
+      summaryModel: "mistral" 
       forcePrompt: false 
       modelDisplayLabel: "Ollama"
       # addParams:
