@@ -95,3 +95,7 @@ eg:
 * [LiteLLM](https://github.com/BerriAI/litellm) is an OpenAI-like API. It is exposed on http://localhost:8000/ without any authentication by default.
 * [Ollama](https://github.com/ollama/ollama) manages and serve the local models.
 
+## Alternatives
+
+Check out [LM Studio](https://lmstudio.ai/) for a more integrated, but non web-based alternative!
+
