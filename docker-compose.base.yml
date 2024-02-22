@@ -5,6 +5,11 @@ services:
     command: --config /config.yaml
     ports:
      - 8000:8000
+    env_file:
+      - .env
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
     volumes:
       - ./litellm/config.yaml:/config.yaml:ro
 
@@ -33,6 +38,8 @@ services:
     volumes:
       - librechat_mongodb_data:/data/db
     command: mongod --noauth
+    env_file:
+      - .env
   meilisearch:
     image: getmeili/meilisearch:v1.5
     restart: unless-stopped
@@ -40,6 +47,8 @@ services:
     environment:
       - MEILI_HOST=http://meilisearch:7700
       - MEILI_NO_ANALYTICS=true
+    env_file:
+      - .env
     volumes:
       - librechat_meilisearch_data:/meili_data
 
