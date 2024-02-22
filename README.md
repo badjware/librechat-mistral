@@ -1,6 +1,6 @@
 # librechat-mistral
 
-A quick prototype to self-host [LibreChat](https://github.com/danny-avila/LibreChat) with [Mistral](https://mistral.ai/news/announcing-mistral-7b/), and an OpenAI-like api provided by [LiteLLM](https://github.com/BerriAI/litellm) on the side.
+A quick prototype to self-host [LibreChat](https://github.com/danny-avila/LibreChat) backed by a locally-run [Mistral](https://mistral.ai/news/announcing-mistral-7b/) model, and an OpenAI-like api provided by [LiteLLM](https://github.com/BerriAI/litellm) on the side.
 
 ## Goals
 
